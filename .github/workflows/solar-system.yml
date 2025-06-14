@@ -12,8 +12,6 @@ env:
     MONGO_USERNAME: ${{vars.MONGO_USERNAME}}
     MONGO_PASSWORD: ${{secrets.MONGO_PASSWORD}}
 
-
-
 jobs:
     unit-testing:
         name: Unit Testing
@@ -36,30 +34,33 @@ jobs:
     
         - name: Install Dependencies
           run: npm install
-        - name: Run Tests
+
+        - name: Unit Testing
           run: npm test
-
-        - name: Check if test results exist
-          id: test_result_check
-          run: echo "exists=$(if [ -f test-results.xml ]; then echo true; else echo false; fi)" >> $GITHUB_OUTPUT
-
+          
         - name: Archive Test Result
-          if: steps.test_result_check.outputs.exists == 'true'
-          uses: actions/upload-artifact@v4.6.2
+          uses: actions/upload-artifact@v3
           with:
             name: Mocha-Test-Result-${{ github.run_id }}-${{ github.run_attempt }}
             path: test-results.xml
+       
+            # - name: Run Tests
+        #   run: npm test
+
+        # - name: Check if test results exist
+        #   id: test_result_check
+        #   run: echo "exists=$(if [ -f test-results.xml ]; then echo true; else echo false; fi)" >> $GITHUB_OUTPUT
+
+        # - name: Archive Test Result
+        #   if: steps.test_result_check.outputs.exists == 'true'
+        #   uses: actions/upload-artifact@v4.6.2
+        #   with:
+        #     name: Mocha-Test-Result
+        #     path: test-results.xml
 
 
 
     
-        # - name: Unit Testing
-        #   run: npm test
-          
-        # - name: Archive Test Result
-        #   uses: actions/upload-artifact@v4.6.2
-        #   with:
-        #     name: Mocha-Test-Result-${{ github.run_id }}-${{ github.run_attempt }}
-        #     path: test-results.xml
+      
 
             
